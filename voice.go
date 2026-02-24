@@ -28,21 +28,19 @@ type VoicePayload struct {
 	Language   string `json:"language,omitempty"`
 }
 
-func (c *Client) Voice() *Voice {
-	return &Voice{client: c}
-}
-
-func (v *Voice) Delete(options ...func(*VoicePayload)) (*Voice, error) {
-	p := &VoicePayload{}
-	for _, apply := range options {
-		apply(p)
+func (v *Voice) All() ([]Voice, error) {
+	var voices []Voice
+	res, err := v.client.get("/api/v1/tts/voices", nil)
+	if err != nil {
+		return nil, err
 	}
-	if p.ID == "" {
-		return nil, fmt.Errorf("an ID is required")
+	defer res.Body.Close()
+	decoder := json.NewDecoder(res.Body)
+	err = decoder.Decode(&voices)
+	if err != nil {
+		return nil, err
 	}
-	return decodeVoice(
-		v.client.delete(fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil),
-	)
+	return voices, nil
 }
 
 func (v *Voice) Clone(options ...func(*VoicePayload)) (*Voice, error) {
@@ -69,19 +67,17 @@ func (v *Voice) Clone(options ...func(*VoicePayload)) (*Voice, error) {
 	}
 }
 
-func (v *Voice) All() ([]Voice, error) {
-	var voices []Voice
-	res, err := v.client.get("/api/v1/tts/voices", nil)
-	if err != nil {
-		return nil, err
+func (v *Voice) Delete(options ...func(*VoicePayload)) (*Voice, error) {
+	p := &VoicePayload{}
+	for _, apply := range options {
+		apply(p)
 	}
-	defer res.Body.Close()
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&voices)
-	if err != nil {
-		return nil, err
+	if p.ID == "" {
+		return nil, fmt.Errorf("an ID is required")
 	}
-	return voices, nil
+	return decodeVoice(
+		v.client.delete(fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil),
+	)
 }
 
 func (v *Voice) Get(options ...func(*VoicePayload)) (*Voice, error) {
@@ -112,6 +108,10 @@ func (v *Voice) Update(options ...func(*VoicePayload)) (*Voice, error) {
 	return decodeVoice(
 		v.client.patch(fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil, bytes.NewReader(b)),
 	)
+}
+
+func (c *Client) Voice() *Voice {
+	return &Voice{client: c}
 }
 
 func newMultiPart(p *VoicePayload, f *os.File) (*multipart.Writer, *bytes.Buffer, error) {
