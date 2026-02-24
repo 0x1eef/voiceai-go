@@ -13,9 +13,7 @@ func (c *Client) get(path string, headers map[string]string) (*http.Response, er
 		return nil, err
 	}
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.token))
-	for k, v := range headers {
-		req.Header.Set(k, v)
-	}
+	applyHeaders(req, headers)
 	return request(req)
 }
 
@@ -27,9 +25,7 @@ func (c *Client) post(path string, headers map[string]string, body io.Reader) (*
 	}
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.token))
 	req.Header.Set("Content-Type", "application/json")
-	for k, v := range headers {
-		req.Header.Set(k, v)
-	}
+	applyHeaders(req, headers)
 	return request(req)
 }
 
@@ -40,9 +36,7 @@ func (c *Client) delete(path string, headers map[string]string) (*http.Response,
 		return nil, err
 	}
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.token))
-	for k, v := range headers {
-		req.Header.Set(k, v)
-	}
+	applyHeaders(req, headers)
 	return request(req)
 }
 
@@ -53,10 +47,14 @@ func (c *Client) patch(path string, headers map[string]string, body io.Reader) (
 		return nil, err
 	}
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.token))
+	applyHeaders(req, headers)
+	return request(req)
+}
+
+func applyHeaders(req *http.Request, headers map[string]string) {
 	for k, v := range headers {
 		req.Header.Set(k, v)
 	}
-	return request(req)
 }
 
 func request(req *http.Request) (*http.Response, error) {
