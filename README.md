@@ -16,7 +16,7 @@ much more. The README focuses on voice replication and text-to-speech.
 It includes practical examples that can be run via the repository's
 [cmd](cmd) directory.
 
-### Quick start
+## Quick start
 
 #### voiceai.Client
 
