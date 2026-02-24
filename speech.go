@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"net/http"
+	"io"
 )
 
 type Speech struct {
@@ -24,7 +24,7 @@ func (c *Client) Speech() *Speech {
 	return &Speech{client: c}
 }
 
-func (s *Speech) Create(options ...func(*SpeechPayload)) (*http.Response, error) {
+func (s *Speech) Create(options ...func(*SpeechPayload)) (io.ReadCloser, error) {
 	p := &SpeechPayload{}
 	for _, apply := range options {
 		apply(p)
@@ -35,6 +35,31 @@ func (s *Speech) Create(options ...func(*SpeechPayload)) (*http.Response, error)
 	if b, err := json.Marshal(p); err != nil {
 		return nil, err
 	} else {
-		return s.client.post("/api/v1/tts/speech", nil, bytes.NewReader(b))
+		r := bytes.NewReader(b)
+		res, err := s.client.post("/api/v1/tts/speech", nil, r)
+		if err != nil {
+			return nil, err
+		}
+		return res.Body, nil
 	}
+}
+
+func (s *Speech) Stream(options ...func(*SpeechPayload)) (io.ReadCloser, error) {
+	p := &SpeechPayload{}
+	for _, apply := range options {
+		apply(p)
+	}
+	if p.Text == "" {
+		return nil, errors.New("text is required")
+	}
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, err
+	}
+	r := bytes.NewReader(b)
+	res, err := s.client.post("/api/v1/tts/speech/stream", nil, r)
+	if err != nil {
+		return nil, err
+	}
+	return res.Body, nil
 }

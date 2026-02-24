@@ -16,16 +16,16 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	audio, err := client.Speech().Create(
+	stream, err := client.Speech().Stream(
 		speech.WithText("Hello! My name is Trebor"),
-		speech.WithVoiceID("trebors_voice_id"),
+		speech.WithVoiceID("f9e6a5eb-a7fd-4525-9e92-75125249c933"),
 		speech.WithFormat("mp3"),
 	)
 	if err != nil {
 		panic(err)
 	}
-	defer audio.Close()
+	defer stream.Close()
 	out, _ := os.Create("share/outputs/trebor.mp3")
 	defer out.Close()
-	io.Copy(out, audio)
+	io.Copy(out, stream)
 }

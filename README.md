@@ -86,10 +86,12 @@ func main() {
 
 #### Speech.Create
 
-Speech provides text-to-speech (TTS) capabilities. The `Create` method accepts
-a string of text and [various other options](https://voice.ai/docs/api-reference/text-to-speech/generate-speech)
-to configure the request. The following example produces [share/outputs/trebor.mp3](share/outputs/trebor.mp3)
-by using the voice replicated in the previous example:
+Speech provides text-to-speech (TTS) capabilities. This method accepts
+a string of text and [various other options](https://voice.ai/docs/api-reference/text-to-speech/generate-speech).
+It performs a blocking POST request and eventually returns an [io.ReadCloser](https://pkg.go.dev/io#ReadCloser)
+that contains the full response body. The following example produces
+[share/outputs/trebor.mp3](share/outputs/trebor.mp3) and it uses the voice
+that was replicated in the previous example:
 
 ```go
 package main
@@ -110,7 +112,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	res, err := client.Speech().Create(
+	audio, err := client.Speech().Create(
 		speech.WithText("Hello! My name is Trebor"),
 		speech.WithVoiceID("trebors_voice_id"),
 		speech.WithFormat("mp3"),
@@ -118,10 +120,52 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer res.Body.Close()
+	defer audio.Close()
 	out, _ := os.Create("share/outputs/trebor.mp3")
 	defer out.Close()
-	io.Copy(out, res.Body)
+	io.Copy(out, audio)
+}
+```
+
+#### Speech.Stream
+
+Speech supports streaming through the "Stream" method and is otherwise identical to
+the "Create" method. It returns an [io.ReadCloser](https://pkg.go.dev/io#ReadCloser)
+that can be read from as the audio is being produced by the server. This example
+produces the same output as the previous example, and appears identical but the
+audio is being written to the file in real time:
+
+```go
+package main
+
+import (
+	"io"
+	"os"
+
+	"github.com/0x1eef/voiceai"
+	"github.com/0x1eef/voiceai/settings"
+	"github.com/0x1eef/voiceai/settings/speech"
+)
+
+func main() {
+	client, err := voiceai.NewClient(
+		settings.WithToken("yourtoken"),
+	)
+	if err != nil {
+		panic(err)
+	}
+	stream, err := client.Speech().Stream(
+		speech.WithText("Hello! My name is Trebor"),
+		speech.WithVoiceID("trebors_voice_id"),
+		speech.WithFormat("mp3"),
+	)
+	if err != nil {
+		panic(err)
+	}
+	defer stream.Close()
+	out, _ := os.Create("share/outputs/trebor.mp3")
+	defer out.Close()
+	io.Copy(out, stream)
 }
 ```
 
@@ -132,6 +176,7 @@ in the library, but there is support for more than that:
 
 * [speech.go](speech.go)
 	* Speech.Create
+	* Speech.Stream
 
 * [voice.go](voice.go)
 	* Voice.All
