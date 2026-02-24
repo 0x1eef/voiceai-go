@@ -73,14 +73,14 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	res, err := client.Voice().Clone(
+	clonedVoice, err := client.Voice().Clone(
 		voice.WithName("Trebor"),
 		voice.WithPath("share/inputs/trebor.mp3"),
 	)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("%v\n", res)
+	fmt.Printf("%v\n", clonedVoice)
 }
 ```
 
@@ -112,7 +112,7 @@ func main() {
 	}
 	res, err := client.Speech().Create(
 		speech.WithText("Hello! My name is Trebor"),
-		speech.WithVoiceID("yourvoiceid"),
+		speech.WithVoiceID("trebors_voice_id"),
 		speech.WithFormat("mp3"),
 	)
 	if err != nil {

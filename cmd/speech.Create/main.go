@@ -18,7 +18,7 @@ func main() {
 	}
 	res, err := client.Speech().Create(
 		speech.WithText("Hello! My name is Trebor"),
-		speech.WithVoiceID("d1bf0f33-8e0e-4fbf-acf8-45c3c6262513"),
+		speech.WithVoiceID("trebors_voice_id"),
 		speech.WithFormat("mp3"),
 	)
 	if err != nil {

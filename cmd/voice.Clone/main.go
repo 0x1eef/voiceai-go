@@ -16,12 +16,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	res, err := client.Voice().Clone(
+	clonedVoice, err := client.Voice().Clone(
 		voice.WithName("Trebor"),
 		voice.WithPath("share/inputs/trebor.mp3"),
 	)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("%v\n", res)
+	fmt.Printf("%v\n", clonedVoice)
 }
