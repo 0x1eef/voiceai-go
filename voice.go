@@ -13,10 +13,10 @@ import (
 )
 
 type Voice struct {
-	ID         string `json:"voice_id"`
-	Status     string `json:"status"`
-	Name       string `json:"name"`
-	Visibility string `json:"voice_visibility"`
+	ID         string `json:"voice_id,omitempty"`
+	Status     string `json:"status,omitempty"`
+	Name       string `json:"name,omitempty"`
+	Visibility string `json:"voice_visibility,omitempty"`
 	client     *Client
 }
 
@@ -32,7 +32,7 @@ func (c *Client) Voice() *Voice {
 	return &Voice{client: c}
 }
 
-func (v *Voice) Delete(options ...func(*VoicePayload)) (*http.Response, error) {
+func (v *Voice) Delete(options ...func(*VoicePayload)) (*Voice, error) {
 	p := &VoicePayload{}
 	for _, apply := range options {
 		apply(p)
@@ -40,10 +40,12 @@ func (v *Voice) Delete(options ...func(*VoicePayload)) (*http.Response, error) {
 	if p.ID == "" {
 		return nil, fmt.Errorf("an ID is required")
 	}
-	return v.client.delete(fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil)
+	return decodeVoice(
+		v.client.delete(fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil),
+	)
 }
 
-func (v *Voice) Clone(options ...func(*VoicePayload)) (*http.Response, error) {
+func (v *Voice) Clone(options ...func(*VoicePayload)) (*Voice, error) {
 	headers := make(map[string]string)
 	p := &VoicePayload{}
 	for _, apply := range options {
@@ -61,7 +63,9 @@ func (v *Voice) Clone(options ...func(*VoicePayload)) (*http.Response, error) {
 		return nil, err
 	} else {
 		headers["Content-Type"] = w.FormDataContentType()
-		return v.client.post("/api/v1/tts/clone-voice", headers, body)
+		return decodeVoice(
+			v.client.post("/api/v1/tts/clone-voice", headers, body),
+		)
 	}
 }
 
@@ -81,7 +85,6 @@ func (v *Voice) All() ([]Voice, error) {
 }
 
 func (v *Voice) Get(options ...func(*VoicePayload)) (*Voice, error) {
-	var voice Voice
 	p := &VoicePayload{}
 	for _, apply := range options {
 		apply(p)
@@ -89,20 +92,12 @@ func (v *Voice) Get(options ...func(*VoicePayload)) (*Voice, error) {
 	if p.ID == "" {
 		return nil, fmt.Errorf("an ID is required")
 	}
-	res, err := v.client.get(fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&voice)
-	if err != nil {
-		return nil, err
-	}
-	return &voice, nil
+	return decodeVoice(
+		v.client.get(fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil),
+	)
 }
 
-func (v *Voice) Update(options ...func(*VoicePayload)) (*http.Response, error) {
+func (v *Voice) Update(options ...func(*VoicePayload)) (*Voice, error) {
 	p := &VoicePayload{}
 	for _, apply := range options {
 		apply(p)
@@ -114,7 +109,9 @@ func (v *Voice) Update(options ...func(*VoicePayload)) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	return v.client.patch(fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil, bytes.NewReader(b))
+	return decodeVoice(
+		v.client.patch(fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil, bytes.NewReader(b)),
+	)
 }
 
 func newMultiPart(p *VoicePayload, f *os.File) (*multipart.Writer, *bytes.Buffer, error) {
@@ -143,4 +140,18 @@ func writeField(w *multipart.Writer, key string, value string) error {
 		return nil
 	}
 	return w.WriteField(key, value)
+}
+
+func decodeVoice(res *http.Response, err error) (*Voice, error) {
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+	var voice Voice
+	decoder := json.NewDecoder(res.Body)
+	err = decoder.Decode(&voice)
+	if err != nil {
+		return nil, err
+	}
+	return &voice, nil
 }
