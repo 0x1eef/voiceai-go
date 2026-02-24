@@ -9,8 +9,8 @@ func NewClient(options ...func(*Client)) (*Client, error) {
 	c := &Client{
 		host: "dev.voice.ai",
 	}
-	for _, set := range options {
-		set(c)
+	for _, apply := range options {
+		apply(c)
 	}
 	return c, nil
 }

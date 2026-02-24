@@ -34,8 +34,8 @@ func (c *Client) Voice() *Voice {
 
 func (v *Voice) Delete(options ...func(*VoicePayload)) (*http.Response, error) {
 	p := &VoicePayload{}
-	for _, set := range options {
-		set(p)
+	for _, apply := range options {
+		apply(p)
 	}
 	if p.ID == "" {
 		return nil, fmt.Errorf("an ID is required")
@@ -46,8 +46,8 @@ func (v *Voice) Delete(options ...func(*VoicePayload)) (*http.Response, error) {
 func (v *Voice) Clone(options ...func(*VoicePayload)) (*http.Response, error) {
 	headers := make(map[string]string)
 	p := &VoicePayload{}
-	for _, set := range options {
-		set(p)
+	for _, apply := range options {
+		apply(p)
 	}
 	if p.Path == "" {
 		return nil, errors.New("a path is required")
@@ -83,8 +83,8 @@ func (v *Voice) All() ([]Voice, error) {
 func (v *Voice) Get(options ...func(*VoicePayload)) (*Voice, error) {
 	var voice Voice
 	p := &VoicePayload{}
-	for _, set := range options {
-		set(p)
+	for _, apply := range options {
+		apply(p)
 	}
 	if p.ID == "" {
 		return nil, fmt.Errorf("an ID is required")
@@ -104,8 +104,8 @@ func (v *Voice) Get(options ...func(*VoicePayload)) (*Voice, error) {
 
 func (v *Voice) Update(options ...func(*VoicePayload)) (*http.Response, error) {
 	p := &VoicePayload{}
-	for _, set := range options {
-		set(p)
+	for _, apply := range options {
+		apply(p)
 	}
 	if p.ID == "" {
 		return nil, fmt.Errorf("an ID is required")

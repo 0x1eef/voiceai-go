@@ -26,8 +26,8 @@ func (c *Client) Speech() *Speech {
 
 func (s *Speech) Create(options ...func(*SpeechPayload)) (*http.Response, error) {
 	p := &SpeechPayload{}
-	for _, set := range options {
-		set(p)
+	for _, apply := range options {
+		apply(p)
 	}
 	if p.Text == "" {
 		return nil, errors.New("text is required")
