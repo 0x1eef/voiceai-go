@@ -80,7 +80,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("%v\n", clonedVoice)
+	fmt.Printf("ID:          %s\n", clonedVoice.ID)
+	fmt.Printf("Name:        %s\n", clonedVoice.Name)
+	fmt.Printf("Status:      %s\n", clonedVoice.Status)
+	fmt.Printf("Visibility:  %s\n", clonedVoice.Visibility)
+
 }
 ```
 
@@ -181,7 +185,7 @@ package main
 import (
 	"fmt"
 	"os"
-	
+
 	"github.com/0x1eef/voiceai"
 	"github.com/0x1eef/voiceai/settings"
 	"github.com/0x1eef/voiceai/settings/agent"
