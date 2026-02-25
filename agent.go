@@ -22,7 +22,7 @@ type AgentPayload struct {
 	Status     string             `json:"status,omitempty"`
 	StatusCode int                `json:"status_code,omitempty"`
 	KBID       int                `json:"kb_id,omitempty"`
-	Ctx        *context.Context   `json:"-"`
+	Ctx        context.Context    `json:"-"`
 }
 
 type AgentConfigPayload struct {
@@ -95,19 +95,19 @@ func (a *Agent) Create(options ...func(*AgentPayload)) (*Agent, error) {
 	return decodeAgent(res, a.client)
 }
 
-func (a *Agent) Deploy(ctx *context.Context) error {
+func (a *Agent) Deploy(ctx context.Context) error {
 	path := fmt.Sprintf("/api/v1/agent/%s/deploy", a.AgentID)
 	_, err := a.client.post(ctx, path, nil, nil)
 	return err
 }
 
-func (a *Agent) Disable(ctx *context.Context) error {
+func (a *Agent) Disable(ctx context.Context) error {
 	path := fmt.Sprintf("/api/v1/agent/%s/disable", a.AgentID)
 	_, err := a.client.post(ctx, path, nil, nil)
 	return err
 }
 
-func (a *Agent) Pause(ctx *context.Context) error {
+func (a *Agent) Pause(ctx context.Context) error {
 	path := fmt.Sprintf("/api/v1/agent/%s/pause", a.AgentID)
 	_, err := a.client.post(ctx, path, nil, nil)
 	return err

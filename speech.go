@@ -13,13 +13,13 @@ type Speech struct {
 }
 
 type SpeechPayload struct {
-	Text     string           `json:"text"`
-	VoiceID  *string          `json:"voice_id,omitempty"`
-	Format   *string          `json:"audio_format,omitempty"`
-	Temp     *string          `json:"temperature,omitempty"`
-	Model    *string          `json:"model,omitempty"`
-	Language *string          `json:"language,omitempty"`
-	Ctx      *context.Context `json:"-"`
+	Text     string          `json:"text"`
+	VoiceID  *string         `json:"voice_id,omitempty"`
+	Format   *string         `json:"audio_format,omitempty"`
+	Temp     *string         `json:"temperature,omitempty"`
+	Model    *string         `json:"model,omitempty"`
+	Language *string         `json:"language,omitempty"`
+	Ctx      context.Context `json:"-"`
 }
 
 func (c *Client) Speech() *Speech {

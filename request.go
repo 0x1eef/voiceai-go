@@ -7,28 +7,28 @@ import (
 	"net/http"
 )
 
-func (c *Client) get(ctx *context.Context, path string, headers map[string]string) (*http.Response, error) {
+func (c *Client) get(ctx context.Context, path string, headers map[string]string) (*http.Response, error) {
 	url := fmt.Sprintf("https://%s%s", c.host, path)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
 	if ctx != nil {
-		req = req.WithContext(*ctx)
+		req = req.WithContext(ctx)
 	}
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.token))
 	applyHeaders(req, headers)
 	return request(req)
 }
 
-func (c *Client) post(ctx *context.Context, path string, headers map[string]string, body io.Reader) (*http.Response, error) {
+func (c *Client) post(ctx context.Context, path string, headers map[string]string, body io.Reader) (*http.Response, error) {
 	url := fmt.Sprintf("https://%s%s", c.host, path)
 	req, err := http.NewRequest("POST", url, body)
 	if err != nil {
 		return nil, err
 	}
 	if ctx != nil {
-		req = req.WithContext(*ctx)
+		req = req.WithContext(ctx)
 	}
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.token))
 	req.Header.Set("Content-Type", "application/json")
@@ -36,28 +36,28 @@ func (c *Client) post(ctx *context.Context, path string, headers map[string]stri
 	return request(req)
 }
 
-func (c *Client) delete(ctx *context.Context, path string, headers map[string]string) (*http.Response, error) {
+func (c *Client) delete(ctx context.Context, path string, headers map[string]string) (*http.Response, error) {
 	url := fmt.Sprintf("https://%s%s", c.host, path)
 	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
 		return nil, err
 	}
 	if ctx != nil {
-		req = req.WithContext(*ctx)
+		req = req.WithContext(ctx)
 	}
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.token))
 	applyHeaders(req, headers)
 	return request(req)
 }
 
-func (c *Client) patch(ctx *context.Context, path string, headers map[string]string, body io.Reader) (*http.Response, error) {
+func (c *Client) patch(ctx context.Context, path string, headers map[string]string, body io.Reader) (*http.Response, error) {
 	url := fmt.Sprintf("https://%s%s", c.host, path)
 	req, err := http.NewRequest("PATCH", url, body)
 	if err != nil {
 		return nil, err
 	}
 	if ctx != nil {
-		req = req.WithContext(*ctx)
+		req = req.WithContext(ctx)
 	}
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.token))
 	applyHeaders(req, headers)

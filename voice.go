@@ -22,12 +22,12 @@ type Voice struct {
 }
 
 type VoicePayload struct {
-	Path       string           `json:"-"`
-	ID         string           `json:"-"`
-	Name       string           `json:"name,omitempty"`
-	Visibility string           `json:"voice_visibility,omitempty"`
-	Language   string           `json:"language,omitempty"`
-	Ctx        *context.Context `json:"-"`
+	Path       string          `json:"-"`
+	ID         string          `json:"-"`
+	Name       string          `json:"name,omitempty"`
+	Visibility string          `json:"voice_visibility,omitempty"`
+	Language   string          `json:"language,omitempty"`
+	Ctx        context.Context `json:"-"`
 }
 
 func (v *Voice) All(options ...func(*VoicePayload)) ([]Voice, error) {

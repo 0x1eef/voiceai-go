@@ -1,6 +1,9 @@
 package speech
 
-import "github.com/0x1eef/voiceai"
+import (
+	"context"
+	"github.com/0x1eef/voiceai"
+)
 
 func WithContext(ctx context.Context) func(*voiceai.SpeechPayload) {
 	return func(p *voiceai.SpeechPayload) {
