@@ -168,6 +168,45 @@ func main() {
 }
 ```
 
+#### Agent.{Create,Deploy}
+
+Agent provides agent management capabilities. The "Create" method accepts the name of
+the agent to be created and [various other options](https://voice.ai/docs/api-reference/agent-management/create-agent),
+including a prompt that describes the agent's behavior:
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/0x1eef/voiceai"
+	"github.com/0x1eef/voiceai/settings"
+	"github.com/0x1eef/voiceai/settings/agent"
+)
+
+func main() {
+	client, err := voiceai.NewClient(
+		settings.WithToken("yourtoken"),
+	)
+	if err != nil {
+		panic(err)
+	}
+	agent, err := client.Agent().Create(
+		agent.WithName("Trebor"),
+		agent.WithPrompt("Trebor is a helpful assistant"),
+	)
+	if err != nil {
+		panic(err)
+	}
+	if agent, err := agent.Deploy(); err != nil {
+		panic(err)
+	} else {
+		fmt.Printf("Agent deployed: %v\n", agent)
+	}
+}
+```
+
 ## API Index
 
 The Quick Start section above provides examples for the most interesting methods
@@ -187,6 +226,7 @@ in the library, but there is support for more than that:
 * [agent.go](agent.go)
 	* Agent.All
 	* Agent.Create
+	* Agent.Deploy
 
 ## Resources
 

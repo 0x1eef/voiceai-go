@@ -60,7 +60,7 @@ func applyHeaders(req *http.Request, headers map[string]string) {
 func request(req *http.Request) (*http.Response, error) {
 	if res, err := http.DefaultClient.Do(req); err != nil {
 		return res, err
-	} else if res.StatusCode != http.StatusOK {
+	} else if res.StatusCode != http.StatusOK && res.StatusCode != http.StatusCreated {
 		body, _ := io.ReadAll(res.Body)
 		return res, fmt.Errorf("bad status: %d body: %s", res.StatusCode, string(body))
 	} else {

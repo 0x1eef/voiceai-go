@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/http"
 )
 
 type Agent struct {
@@ -66,7 +67,6 @@ func (a *Agent) All() ([]Agent, error) {
 }
 
 func (a *Agent) Create(options ...func(*AgentPayload)) (*Agent, error) {
-	var agent Agent
 	p := &AgentPayload{}
 	for _, apply := range options {
 		apply(p)
@@ -82,16 +82,30 @@ func (a *Agent) Create(options ...func(*AgentPayload)) (*Agent, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer res.Body.Close()
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&agent)
+	return decodeAgent(res, a.client)
+}
+
+func (a *Agent) Deploy() (*Agent, error) {
+	path := fmt.Sprintf("/api/v1/agent/%s/deploy", a.AgentID)
+	res, err := a.client.post(path, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	agent.client = a.client
-	return &agent, nil
+	return decodeAgent(res, a.client)
 }
 
 func (c *Client) Agent() *Agent {
 	return &Agent{client: c}
+}
+
+func decodeAgent(res *http.Response, client *Client) (*Agent, error) {
+	var agent Agent
+	defer res.Body.Close()
+	decoder := json.NewDecoder(res.Body)
+	err := decoder.Decode(&agent)
+	if err != nil {
+		return nil, err
+	}
+	agent.client = client
+	return &agent, nil
 }
