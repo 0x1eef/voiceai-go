@@ -84,7 +84,6 @@ func main() {
 	fmt.Printf("Name:        %s\n", clonedVoice.Name)
 	fmt.Printf("Status:      %s\n", clonedVoice.Status)
 	fmt.Printf("Visibility:  %s\n", clonedVoice.Visibility)
-
 }
 ```
 
