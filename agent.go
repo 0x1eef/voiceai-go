@@ -85,31 +85,22 @@ func (a *Agent) Create(options ...func(*AgentPayload)) (*Agent, error) {
 	return decodeAgent(res, a.client)
 }
 
-func (a *Agent) Deploy() (*Agent, error) {
+func (a *Agent) Deploy() error {
 	path := fmt.Sprintf("/api/v1/agent/%s/deploy", a.AgentID)
-	res, err := a.client.post(path, nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	return decodeAgent(res, a.client)
+	_, err := a.client.post(path, nil, nil)
+	return err
 }
 
-func (a *Agent) Pause() (*Agent, error) {
+func (a *Agent) Pause() error {
 	path := fmt.Sprintf("/api/v1/agent/%s/pause", a.AgentID)
-	res, err := a.client.post(path, nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	return decodeAgent(res, a.client)
+	_, err := a.client.post(path, nil, nil)
+	return err
 }
 
-func (a *Agent) Disable() (*Agent, error) {
+func (a *Agent) Disable() error {
 	path := fmt.Sprintf("/api/v1/agent/%s/disable", a.AgentID)
-	res, err := a.client.post(path, nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	return decodeAgent(res, a.client)
+	_, err := a.client.post(path, nil, nil)
+	return err
 }
 
 func (c *Client) Agent() *Agent {

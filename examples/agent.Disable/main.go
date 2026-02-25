@@ -19,11 +19,11 @@ func main() {
 		panic(err)
 	}
 	for _, agent := range agents {
-		_, err := agent.Pause()
+		err := agent.Pause()
 		if err != nil {
 			continue
 		}
-		_, err = agent.Disable()
+		err = agent.Disable()
 		if err != nil {
 			panic(err)
 		}

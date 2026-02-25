@@ -23,9 +23,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	if agent, err := agent.Deploy(); err != nil {
+	if err := agent.Deploy(); err != nil {
 		panic(err)
 	} else {
-		fmt.Printf("Agent status: %s\n", agent.Status)
+		fmt.Printf("Agent deployed\n")
 	}
 }
