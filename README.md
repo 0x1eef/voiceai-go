@@ -10,11 +10,10 @@
 
 
 voiceai-go provides **unofficial** Go bindings for
-[voice.ai](https://voice.ai)'s REST API &ndash; which supports
-a lot of cool features like text-to-speech, voice replication and
-much more. The README focuses on voice replication and text-to-speech.
-It includes practical examples that can be run via the repository's
-[cmd](cmd) directory.
+[voice.ai](https://voice.ai)'s REST API &ndash; which supports features
+such as text-to-speech, voice replication, and agent management. The README
+focuses on voice replication and text-to-speech. It includes practical examples
+that can be run via the repository's [cmd](cmd) directory.
 
 ## Quick start
 
@@ -132,8 +131,8 @@ func main() {
 Speech supports streaming through the "Stream" method and is otherwise identical to
 the "Create" method. It returns an [io.ReadCloser](https://pkg.go.dev/io#ReadCloser)
 that can be read from as the audio is being produced by the server. This example
-produces the same output as the previous example, and appears identical but the
-audio is being written to the file in real time:
+produces the same output as the previous example, and appears identical
+but the audio is written to the file as it is streamed from the server:
 
 ```go
 package main
