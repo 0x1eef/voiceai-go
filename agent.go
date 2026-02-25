@@ -59,6 +59,9 @@ func (a *Agent) All() ([]Agent, error) {
 	if err != nil {
 		return nil, err
 	}
+	for _, agent := range agents {
+		agent.client = a.client
+	}
 	return agents, nil
 }
 
@@ -85,6 +88,7 @@ func (a *Agent) Create(options ...func(*AgentPayload)) (*Agent, error) {
 	if err != nil {
 		return nil, err
 	}
+	agent.client = a.client
 	return &agent, nil
 }
 
