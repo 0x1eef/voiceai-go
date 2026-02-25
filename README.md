@@ -29,6 +29,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/0x1eef/voiceai"
 	"github.com/0x1eef/voiceai/settings"
@@ -36,7 +37,7 @@ import (
 
 func main() {
 	client, err := voiceai.NewClient(
-		settings.WithToken("yourtoken"),
+		settings.WithToken(os.Getenv("KEY")),
 	)
 	if err != nil {
 		panic(err)
@@ -106,7 +107,7 @@ import (
 
 func main() {
 	client, err := voiceai.NewClient(
-		settings.WithToken("yourtoken"),
+		settings.WithToken(os.Getenv("KEY")),
 	)
 	if err != nil {
 		panic(err)
@@ -148,7 +149,7 @@ import (
 
 func main() {
 	client, err := voiceai.NewClient(
-		settings.WithToken("yourtoken"),
+		settings.WithToken(os.Getenv("KEY")),
 	)
 	if err != nil {
 		panic(err)
@@ -179,7 +180,8 @@ package main
 
 import (
 	"fmt"
-
+	"os"
+	
 	"github.com/0x1eef/voiceai"
 	"github.com/0x1eef/voiceai/settings"
 	"github.com/0x1eef/voiceai/settings/agent"
@@ -187,7 +189,7 @@ import (
 
 func main() {
 	client, err := voiceai.NewClient(
-		settings.WithToken("yourtoken"),
+		settings.WithToken(os.Getenv("KEY")),
 	)
 	if err != nil {
 		panic(err)
