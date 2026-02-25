@@ -2,6 +2,12 @@ package speech
 
 import "github.com/0x1eef/voiceai"
 
+func WithContext(ctx context.Context) func(*voiceai.SpeechPayload) {
+	return func(p *voiceai.SpeechPayload) {
+		p.Ctx = &ctx
+	}
+}
+
 func WithText(text string) func(*voiceai.SpeechPayload) {
 	return func(p *voiceai.SpeechPayload) {
 		p.Text = text

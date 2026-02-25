@@ -2,6 +2,7 @@ package voiceai
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"io"
@@ -12,12 +13,13 @@ type Speech struct {
 }
 
 type SpeechPayload struct {
-	Text     string  `json:"text"`
-	VoiceID  *string `json:"voice_id,omitempty"`
-	Format   *string `json:"audio_format,omitempty"`
-	Temp     *string `json:"temperature,omitempty"`
-	Model    *string `json:"model,omitempty"`
-	Language *string `json:"language,omitempty"`
+	Text     string           `json:"text"`
+	VoiceID  *string          `json:"voice_id,omitempty"`
+	Format   *string          `json:"audio_format,omitempty"`
+	Temp     *string          `json:"temperature,omitempty"`
+	Model    *string          `json:"model,omitempty"`
+	Language *string          `json:"language,omitempty"`
+	Ctx      *context.Context `json:"-"`
 }
 
 func (c *Client) Speech() *Speech {
@@ -36,7 +38,7 @@ func (s *Speech) Create(options ...func(*SpeechPayload)) (io.ReadCloser, error) 
 		return nil, err
 	} else {
 		r := bytes.NewReader(b)
-		res, err := s.client.post("/api/v1/tts/speech", nil, r)
+		res, err := s.client.post(p.Ctx, "/api/v1/tts/speech", nil, r)
 		if err != nil {
 			return nil, err
 		}
@@ -57,7 +59,7 @@ func (s *Speech) Stream(options ...func(*SpeechPayload)) (io.ReadCloser, error) 
 		return nil, err
 	}
 	r := bytes.NewReader(b)
-	res, err := s.client.post("/api/v1/tts/speech/stream", nil, r)
+	res, err := s.client.post(p.Ctx, "/api/v1/tts/speech/stream", nil, r)
 	if err != nil {
 		return nil, err
 	}

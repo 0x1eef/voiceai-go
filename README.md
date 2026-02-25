@@ -75,6 +75,7 @@ func main() {
 		panic(err)
 	}
 	clonedVoice, err := client.Voice().Clone(
+		voice.WithContext(context.Background()), // optional - can be omitted
 		voice.WithName("Trebor"),
 		voice.WithPath("share/inputs/trebor.mp3"),
 	)
@@ -116,7 +117,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	audio, err := client.Speech().Create(
+	audio, err := client.Speech.Create(
+		speech.WithContext(context.Background()), // optional - can be omitted
 		speech.WithText("Hello! My name is Trebor"),
 		speech.WithVoiceID("trebors_voice_id"),
 		speech.WithFormat("mp3"),
@@ -158,7 +160,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	stream, err := client.Speech().Stream(
+	stream, err := client.Speech(ctx).Stream(
+		speech.WithContext(context.Background()), // optional - can be omitted
 		speech.WithText("Hello! My name is Trebor"),
 		speech.WithVoiceID("trebors_voice_id"),
 		speech.WithFormat("mp3"),
@@ -199,13 +202,14 @@ func main() {
 		panic(err)
 	}
 	agent, err := client.Agent().Create(
+		agent.WithContext(context.Background()), // optional - can be omitted
 		agent.WithName("Trebor"),
 		agent.WithPrompt("Trebor is a helpful assistant"),
 	)
 	if err != nil {
 		panic(err)
 	}
-	if err = agent.Deploy(); err != nil {
+	if err = agent.Deploy(context.Background()); err != nil {
 		panic(err)
 	} else {
 		fmt.Printf("Agent deployed\n")

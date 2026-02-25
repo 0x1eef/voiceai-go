@@ -2,6 +2,7 @@ package voiceai
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -21,16 +22,21 @@ type Voice struct {
 }
 
 type VoicePayload struct {
-	Path       string `json:"-"`
-	ID         string `json:"-"`
-	Name       string `json:"name,omitempty"`
-	Visibility string `json:"voice_visibility,omitempty"`
-	Language   string `json:"language,omitempty"`
+	Path       string           `json:"-"`
+	ID         string           `json:"-"`
+	Name       string           `json:"name,omitempty"`
+	Visibility string           `json:"voice_visibility,omitempty"`
+	Language   string           `json:"language,omitempty"`
+	Ctx        *context.Context `json:"-"`
 }
 
-func (v *Voice) All() ([]Voice, error) {
+func (v *Voice) All(options ...func(*VoicePayload)) ([]Voice, error) {
+	p := &VoicePayload{}
+	for _, set := range options {
+		set(p)
+	}
 	var voices []Voice
-	res, err := v.client.get("/api/v1/tts/voices", nil)
+	res, err := v.client.get(p.Ctx, "/api/v1/tts/voices", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +68,7 @@ func (v *Voice) Clone(options ...func(*VoicePayload)) (*Voice, error) {
 	} else {
 		headers["Content-Type"] = w.FormDataContentType()
 		return decodeVoice(
-			v.client.post("/api/v1/tts/clone-voice", headers, body),
+			v.client.post(p.Ctx, "/api/v1/tts/clone-voice", headers, body),
 		)
 	}
 }
@@ -76,7 +82,7 @@ func (v *Voice) Delete(options ...func(*VoicePayload)) (*Voice, error) {
 		return nil, fmt.Errorf("an ID is required")
 	}
 	return decodeVoice(
-		v.client.delete(fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil),
+		v.client.delete(p.Ctx, fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil),
 	)
 }
 
@@ -89,7 +95,7 @@ func (v *Voice) Get(options ...func(*VoicePayload)) (*Voice, error) {
 		return nil, fmt.Errorf("an ID is required")
 	}
 	return decodeVoice(
-		v.client.get(fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil),
+		v.client.get(p.Ctx, fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil),
 	)
 }
 
@@ -106,7 +112,7 @@ func (v *Voice) Update(options ...func(*VoicePayload)) (*Voice, error) {
 		return nil, err
 	}
 	return decodeVoice(
-		v.client.patch(fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil, bytes.NewReader(b)),
+		v.client.patch(p.Ctx, fmt.Sprintf("/api/v1/tts/voice/%s", p.ID), nil, bytes.NewReader(b)),
 	)
 }
 

@@ -1,6 +1,16 @@
 package voice
 
-import "github.com/0x1eef/voiceai"
+import (
+	"context"
+
+	"github.com/0x1eef/voiceai"
+)
+
+func WithContext(ctx context.Context) func(*voiceai.VoicePayload) {
+	return func(p *voiceai.VoicePayload) {
+		p.Ctx = &ctx
+	}
+}
 
 func WithID(id string) func(*voiceai.VoicePayload) {
 	return func(p *voiceai.VoicePayload) {

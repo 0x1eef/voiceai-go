@@ -2,6 +2,7 @@ package voiceai
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -21,6 +22,7 @@ type AgentPayload struct {
 	Status     string             `json:"status,omitempty"`
 	StatusCode int                `json:"status_code,omitempty"`
 	KBID       int                `json:"kb_id,omitempty"`
+	Ctx        *context.Context   `json:"-"`
 }
 
 type AgentConfigPayload struct {
@@ -52,9 +54,13 @@ func (c *Client) Agent() *Agent {
 	return &Agent{client: c}
 }
 
-func (a *Agent) All() ([]Agent, error) {
+func (a *Agent) All(options ...func(*AgentPayload)) ([]Agent, error) {
+	p := &AgentPayload{}
+	for _, apply := range options {
+		apply(p)
+	}
 	var agents []Agent
-	res, err := a.client.get("/api/v1/agent", nil)
+	res, err := a.client.get(p.Ctx, "/api/v1/agent", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -82,28 +88,28 @@ func (a *Agent) Create(options ...func(*AgentPayload)) (*Agent, error) {
 	if err != nil {
 		return nil, err
 	}
-	res, err := a.client.post("/api/v1/agent", nil, bytes.NewReader(b))
+	res, err := a.client.post(p.Ctx, "/api/v1/agent", nil, bytes.NewReader(b))
 	if err != nil {
 		return nil, err
 	}
 	return decodeAgent(res, a.client)
 }
 
-func (a *Agent) Deploy() error {
+func (a *Agent) Deploy(ctx *context.Context) error {
 	path := fmt.Sprintf("/api/v1/agent/%s/deploy", a.AgentID)
-	_, err := a.client.post(path, nil, nil)
+	_, err := a.client.post(ctx, path, nil, nil)
 	return err
 }
 
-func (a *Agent) Disable() error {
+func (a *Agent) Disable(ctx *context.Context) error {
 	path := fmt.Sprintf("/api/v1/agent/%s/disable", a.AgentID)
-	_, err := a.client.post(path, nil, nil)
+	_, err := a.client.post(ctx, path, nil, nil)
 	return err
 }
 
-func (a *Agent) Pause() error {
+func (a *Agent) Pause(ctx *context.Context) error {
 	path := fmt.Sprintf("/api/v1/agent/%s/pause", a.AgentID)
-	_, err := a.client.post(path, nil, nil)
+	_, err := a.client.post(ctx, path, nil, nil)
 	return err
 }
 
