@@ -12,9 +12,9 @@
 voiceai-go provides **unofficial** Go bindings for
 [voice.ai](https://voice.ai)'s REST API &ndash; which supports features
 such as text-to-speech, voice replication, and agent management. The README
-focuses on voice replication and text-to-speech. It includes practical examples
-that can be run via the repository's [examples/](examples/) directory. There’s
-also plans for an experimental CLI in the [cmd/](cmd/) directory.
+focuses on voice replication, text-to-speech, and agent management. It includes
+practical examples that can be run via the repository's [examples/](examples/)
+directory.
 
 ## Quick start
 
