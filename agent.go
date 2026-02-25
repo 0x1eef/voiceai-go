@@ -60,8 +60,8 @@ func (a *Agent) All() ([]Agent, error) {
 	if err != nil {
 		return nil, err
 	}
-	for _, agent := range agents {
-		agent.client = a.client
+	for i := range agents {
+		agents[i].client = a.client
 	}
 	return agents, nil
 }
