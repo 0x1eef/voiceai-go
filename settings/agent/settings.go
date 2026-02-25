@@ -9,13 +9,19 @@ func WithName(name string) func(*voiceai.AgentPayload) {
 }
 
 func WithPrompt(prompt string) func(*voiceai.AgentPayload) {
-	return func(c *voiceai.AgentPayload) {
-		c.Config.Prompt = prompt
+	return func(a *voiceai.AgentPayload) {
+		a.Config.Prompt = prompt
 	}
 }
 
 func WithGreeting(greeting string) func(*voiceai.AgentPayload) {
-	return func(c *voiceai.AgentPayload) {
-		c.Config.Greeting = greeting
+	return func(a *voiceai.AgentPayload) {
+		a.Config.Greeting = greeting
+	}
+}
+
+func WithPhoneNumber(phone string) func(*voiceai.AgentPayload) {
+	return func(a *voiceai.AgentPayload) {
+		a.Config.PhoneNumber = phone
 	}
 }
