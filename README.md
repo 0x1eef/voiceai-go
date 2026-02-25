@@ -227,6 +227,8 @@ in the library, but there is support for more than that:
 	* Agent.All
 	* Agent.Create
 	* Agent.Deploy
+	* Agent.Pause
+	* Agent.Disable
 
 ## Resources
 

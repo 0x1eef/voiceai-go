@@ -94,6 +94,24 @@ func (a *Agent) Deploy() (*Agent, error) {
 	return decodeAgent(res, a.client)
 }
 
+func (a *Agent) Pause() (*Agent, error) {
+	path := fmt.Sprintf("/api/v1/agent/%s/pause", a.AgentID)
+	res, err := a.client.post(path, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	return decodeAgent(res, a.client)
+}
+
+func (a *Agent) Disable() (*Agent, error) {
+	path := fmt.Sprintf("/api/v1/agent/%s/disable", a.AgentID)
+	res, err := a.client.post(path, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	return decodeAgent(res, a.client)
+}
+
 func (c *Client) Agent() *Agent {
 	return &Agent{client: c}
 }
