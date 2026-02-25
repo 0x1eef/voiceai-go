@@ -13,3 +13,9 @@ func WithPrompt(prompt string) func(*voiceai.AgentPayload) {
 		c.Config.Prompt = prompt
 	}
 }
+
+func WithGreeting(greeting string) func(*voiceai.AgentPayload) {
+	return func(c *voiceai.AgentPayload) {
+		c.Config.Greeting = greeting
+	}
+}

@@ -47,7 +47,6 @@ type AgentConfigPayload struct {
 	MCPServers                   []map[string]any `json:"mcp_servers,omitempty"`
 }
 
-
 func (a *Agent) All() ([]Agent, error) {
 	var agents []Agent
 	res, err := a.client.get("/api/v1/agent", nil)
