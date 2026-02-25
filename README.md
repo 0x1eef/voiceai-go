@@ -14,7 +14,7 @@ voiceai-go provides **unofficial** Go bindings for
 such as text-to-speech, voice replication, and agent management. The README
 focuses on voice replication and text-to-speech. It includes practical examples
 that can be run via the repository's [examples/](examples/) directory. There’s
-also an experimental CLI in the [cmd/](cmd/) directory.
+also plans for an experimental CLI in the [cmd/](cmd/) directory.
 
 ## Quick start
 
