@@ -48,6 +48,10 @@ type AgentConfigPayload struct {
 	MCPServers                   []map[string]any `json:"mcp_servers,omitempty"`
 }
 
+func (c *Client) Agent() *Agent {
+	return &Agent{client: c}
+}
+
 func (a *Agent) All() ([]Agent, error) {
 	var agents []Agent
 	res, err := a.client.get("/api/v1/agent", nil)
@@ -91,20 +95,16 @@ func (a *Agent) Deploy() error {
 	return err
 }
 
-func (a *Agent) Pause() error {
-	path := fmt.Sprintf("/api/v1/agent/%s/pause", a.AgentID)
-	_, err := a.client.post(path, nil, nil)
-	return err
-}
-
 func (a *Agent) Disable() error {
 	path := fmt.Sprintf("/api/v1/agent/%s/disable", a.AgentID)
 	_, err := a.client.post(path, nil, nil)
 	return err
 }
 
-func (c *Client) Agent() *Agent {
-	return &Agent{client: c}
+func (a *Agent) Pause() error {
+	path := fmt.Sprintf("/api/v1/agent/%s/pause", a.AgentID)
+	_, err := a.client.post(path, nil, nil)
+	return err
 }
 
 func decodeAgent(res *http.Response, client *Client) (*Agent, error) {

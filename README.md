@@ -224,17 +224,17 @@ in the library, but there is support for more than that:
 
 * [voice.go](voice.go)
 	* Voice.All
-	* Voice.Get
-	* Voice.Delete
-	* Voice.Update
 	* Voice.Clone
+	* Voice.Delete
+	* Voice.Get
+	* Voice.Update
 
 * [agent.go](agent.go)
 	* Agent.All
 	* Agent.Create
+	* Agent.Disable
 	* Agent.Deploy
 	* Agent.Pause
-	* Agent.Disable
 
 ## Resources
 
