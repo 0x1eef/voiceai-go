@@ -186,6 +186,7 @@ in the library, but there is support for more than that:
 	* Voice.Clone
 
 * [agent.go](agent.go)
+	* Agent.All
 	* Agent.Create
 
 ## Resources
