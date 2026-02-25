@@ -160,7 +160,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	stream, err := client.Speech(ctx).Stream(
+	stream, err := client.Speech().Stream(
 		speech.WithContext(context.Background()), // optional - can be omitted
 		speech.WithText("Hello! My name is Trebor"),
 		speech.WithVoiceID("trebors_voice_id"),
@@ -209,7 +209,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	if err = agent.Deploy(context.Background()); err != nil {
+	if err = agent.Deploy(&context.Background()); err != nil {
 		panic(err)
 	} else {
 		fmt.Printf("Agent deployed\n")
