@@ -59,6 +59,7 @@ The audio is computer-generated and intentionally not based on a real person:
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -102,6 +103,7 @@ that was replicated in the previous example:
 package main
 
 import (
+	"context"
 	"io"
 	"os"
 
@@ -145,6 +147,7 @@ but the audio is written to the file as it is streamed from the server:
 package main
 
 import (
+	"context"
 	"io"
 	"os"
 
@@ -186,6 +189,7 @@ including a prompt that describes the agent's behavior:
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
