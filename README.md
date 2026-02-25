@@ -119,7 +119,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	audio, err := client.Speech.Create(
+	audio, err := client.Speech().Create(
 		speech.WithContext(context.Background()), // optional - can be omitted
 		speech.WithText("Hello! My name is Trebor"),
 		speech.WithVoiceID("trebors_voice_id"),
